@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수오마르떼 - 인테리어 소품 브랜드 매물</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --sellerbiz-black: #030303;
+            --sellerbiz-brown: #474134;
+            --sellerbiz-yellow: #FFC32A;
+            --sellerbiz-light-yellow: #FFF2BA;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fa;
+            color: var(--sellerbiz-black);
+        }
+        
+        /* 헤더 */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--sellerbiz-black);
+        }
+        
+        .nda-badge {
+            background: var(--sellerbiz-yellow);
+            color: var(--sellerbiz-black);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* 히어로 섹션 - 브랜드 느낌 */
+        .hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23FFC32A" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,112C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .property-tag {
+            display: inline-block;
+            background: var(--sellerbiz-yellow);
+            color: var(--sellerbiz-black);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hero-stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .hero-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--sellerbiz-yellow);
+        }
+        
+        /* 메인 컨텐츠 */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+            gap: 30px;
+        }
+        
+        /* 정보 카드 */
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--sellerbiz-black);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--sellerbiz-light-yellow);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: var(--sellerbiz-black);
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* 특별 섹션 */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--sellerbiz-light-yellow) 0%, #fff 100%);
+            border-left: 4px solid var(--sellerbiz-yellow);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .highlight-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--sellerbiz-brown);
+            margin-bottom: 10px;
+        }
+        
+        .highlight-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 플랫폼 태그 */
+        .platform-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .platform-tag {
+            background: var(--sellerbiz-black);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* 브랜드 강점 카드 */
+        .brand-card {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .brand-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--sellerbiz-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .brand-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .brand-desc {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        
+        .price-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .price-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .price-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--sellerbiz-black);
+            margin-bottom: 5px;
+        }
+        
+        .price-sub {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .cta-button {
+            width: 100%;
+            padding: 18px;
+            background: var(--sellerbiz-yellow);
+            color: var(--sellerbiz-black);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .cta-button:hover {
+            background: #FFB800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 195, 42, 0.4);
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .contact-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* 차트 컨테이너 */
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        /* 리스트 */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f8f8;
+            border-left: 4px solid var(--sellerbiz-yellow);
+            border-radius: 8px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                max-width: 900px;
+            }
+            
+            .sidebar {
+                position: static;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                max-width: 100%;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">셀러비즈</div>
+            <div class="nda-badge">🔒 NDA 체결 완료</div>
+        </div>
+    </header>
+    
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="property-tag">🎨 디자인 브랜드</span>
+            <h1>SUOMARTE</h1>
+            <p class="hero-subtitle">
+                브랜드 아이덴티티가 뚜렷하게 구축된 인테리어 소품 브랜드<br>
+                성장 잠재력이 높은 신생 브랜드로 마케팅 강화 시 급성장 가능
+            </p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-label">월 평균 매출</span>
+                    <span class="hero-stat-value">70만원</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">월 순이익</span>
+                    <span class="hero-stat-value">30만원</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">마진율</span>
+                    <span class="hero-stat-value">42.8%</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-label">브랜드 가치</span>
+                    <span class="hero-stat-value">성장형</span>
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 매도자의 입력폼 정보를 기반으로 제작되었습니다.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <!-- 왼쪽 컨텐츠 -->
+        <div class="left-content">
+            <!-- 브랜드 소개 -->
+            <div class="info-card">
+                <h2 class="card-title">🎯 브랜드 핵심 가치</h2>
+                
+                <div class="highlight-box">
+                    <div class="highlight-title">✨ 창업자의 메시지</div>
+                    <div class="highlight-text">
+                        "브랜드 아이덴티티가 뚜렷하게 구축되어 매출 0원부터 키워온 브랜드입니다.
+                        브랜딩이 제일 큰 강점이지만, 재무적으로도 마진율을 높이기 위한 활동을 거쳐 
+                        추후 판매량이 상승했을 경우 안정성도 보장합니다. 
+                        인테리어 소품 시장에서 키플레이어가 명확하지 않지만 
+                        소비자의 관심도가 높아지고 있어 시기적으로 적절하다 판단합니다."
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+                    <div class="brand-card">
+                        <div class="brand-icon">💡</div>
+                        <div class="brand-title">브랜드 아이덴티티</div>
+                        <div class="brand-desc">명확한 브랜드 컨셉과 디자인 언어 확립</div>
+                    </div>
+                    <div class="brand-card">
+                        <div class="brand-icon">📈</div>
+                        <div class="brand-title">성장 잠재력</div>
+                        <div class="brand-desc">인테리어 소품 시장의 성장기 진입</div>
+                    </div>
+                    <div class="brand-card">
+                        <div class="brand-icon">🎨</div>
+                        <div class="brand-title">디자인 역량</div>
+                        <div class="brand-desc">12 Values 베스트셀러 제품 보유</div>
+                    </div>
+                    <div class="brand-card">
+                        <div class="brand-icon">🏭</div>
+                        <div class="brand-title">생산 안정성</div>
+                        <div class="brand-desc">OEM + 자체 생산 라인 구축</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 기본 정보 -->
+            <div class="info-card">
+                <h2 class="card-title">📌 기본 정보</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">기업명</span>
+                        <span class="info-value">수오마르떼</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">사업자 등록번호</span>
+                        <span class="info-value">568-16-01957</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">사이트 URL</span>
+                        <span class="info-value">suomarte.co.kr</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">카테고리</span>
+                        <span class="info-value">패션/잡화 · 인테리어 소품</span>
+                    </div>
+                </div>
+                
+                <div class="platform-tags">
+                    <span class="platform-tag">무신사</span>
+                    <span class="platform-tag">29cm</span>
+                    <span class="platform-tag">eqlstore</span>
+                    <span class="platform-tag">오늘의집</span>
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 매도자의 입력폼 정보를 기반으로 제작되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 재무 현황 -->
+            <div class="info-card">
+                <h2 class="card-title">💰 재무 현황</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">월 평균 매출</span>
+                        <span class="info-value">42.8만원</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">최근 3개월 평균</span>
+                        <span class="info-value">38.6만원</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">2024년 총 매출</span>
+                        <span class="info-value">912.2만원</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">최고 월매출</span>
+                        <span class="info-value">161.0만원</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">월 마케팅 비용</span>
+                        <span class="info-value">15만원</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ROAS</span>
+                        <span class="info-value">4.7x</span>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 신용카드 및 판매대행 매출 전표를 통해서 증빙완료 되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 월별 매출 추이 -->
+            <div class="chart-container">
+                <h3 class="chart-title">📊 월별 매출 추이 (2024년 ~ 2025년)</h3>
+                <canvas id="monthlySalesChart"></canvas>
+                <div style="text-align: right; margin-top: 10px;">
+                    <span style="font-size: 10px; color: #999;">* 신용카드 및 판매대행 매출 전표를 통해서 증빙완료 되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 플랫폼별 매출 비중 -->
+            <div class="info-card">
+                <h2 class="card-title">🛍️ 플랫폼별 매출 비중 (전체 기간)</h2>
+                <div style="display: grid; grid-template-columns: 250px 1fr; gap: 40px; align-items: center;">
+                    <div style="position: relative; width: 250px; height: 250px;">
+                        <canvas id="platformChart"></canvas>
+                    </div>
+                    <div id="platformDetails">
+                        <div class="platform-item" style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; font-size: 14px;">무신사</span>
+                                <span style="color: var(--sellerbiz-yellow); font-weight: 700; font-size: 14px;">34.2%</span>
+                            </div>
+                            <div style="background: #f0f0f0; height: 6px; border-radius: 3px; margin-top: 6px;">
+                                <div style="background: var(--sellerbiz-yellow); height: 100%; width: 34.2%; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div class="platform-item" style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; font-size: 14px;">공홈</span>
+                                <span style="color: #667eea; font-weight: 700; font-size: 14px;">28.3%</span>
+                            </div>
+                            <div style="background: #f0f0f0; height: 6px; border-radius: 3px; margin-top: 6px;">
+                                <div style="background: #667eea; height: 100%; width: 28.3%; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div class="platform-item" style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; font-size: 14px;">29CM</span>
+                                <span style="color: #10b981; font-weight: 700; font-size: 14px;">25.4%</span>
+                            </div>
+                            <div style="background: #f0f0f0; height: 6px; border-radius: 3px; margin-top: 6px;">
+                                <div style="background: #10b981; height: 100%; width: 25.4%; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div class="platform-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; font-size: 14px;">EQL</span>
+                                <span style="color: #ef4444; font-weight: 700; font-size: 14px;">12.2%</span>
+                            </div>
+                            <div style="background: #f0f0f0; height: 6px; border-radius: 3px; margin-top: 6px;">
+                                <div style="background: #ef4444; height: 100%; width: 12.2%; border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 신용카드 및 판매대행 매출 전표를 통해서 증빙완료 되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 분기별 성장 분석 -->
+            <div class="chart-container">
+                <h3 class="chart-title">📈 분기별 성장 분석</h3>
+                <canvas id="quarterlyChart"></canvas>
+                <div style="text-align: right; margin-top: 10px;">
+                    <span style="font-size: 10px; color: #999;">* 신용카드 및 판매대행 매출 전표를 통해서 증빙완료 되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 성장 잠재력 차트 -->
+            <div class="chart-container">
+                <h3 class="chart-title">🚀 예상 성장 시나리오</h3>
+                <canvas id="growthChart"></canvas>
+            </div>
+            
+            <!-- 제품 및 생산 정보 -->
+            <div class="info-card">
+                <h2 class="card-title">📦 제품 및 생산 정보</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">베스트셀러</span>
+                        <span class="info-value">12 Values 시리즈</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">생산 방식</span>
+                        <span class="info-value">OEM + 자체생산</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">재생산 가능</span>
+                        <span class="info-value">가능</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">생산 지역</span>
+                        <span class="info-value">서울 노원구</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">재고 현황</span>
+                        <span class="info-value">350만원 (원가기준)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">패키지 재고</span>
+                        <span class="info-value">200개 분량</span>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <div class="highlight-title">💎 베스트셀러 수익성 분석</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 8px;">
+                            <div style="color: #666; font-size: 13px; margin-bottom: 5px;">12 Values 시리즈</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--sellerbiz-yellow);">마진율 67.2%</div>
+                            <div style="color: #999; font-size: 12px; margin-top: 5px;">원가 19,375원 → 판매가 59,000원</div>
+                            <div style="color: #10b981; font-size: 11px; margin-top: 3px;">마진 39,625원</div>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 8px;">
+                            <div style="color: #666; font-size: 13px; margin-bottom: 5px;">월평균 순이익률</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--sellerbiz-yellow);">42.8%</div>
+                            <div style="color: #999; font-size: 12px; margin-top: 5px;">월매출 70만원 → 순이익 30만원</div>
+                            <div style="color: #10b981; font-size: 11px; margin-top: 3px;">업계 평균 20% 대비 2배↑</div>
+                        </div>
+                    </div>
+                    <div style="background: #f8f8f8; padding: 12px; border-radius: 8px; margin-top: 15px;">
+                        <p style="color: #666; font-size: 13px; margin: 0;">
+                            ✅ <strong>높은 마진율의 비결:</strong> OEM 생산과 자체 제작을 병행하며 원가를 최적화. 
+                            특히 베스트셀러 12 Values는 67.2%의 놀라운 마진율로 안정적인 수익 구조 확보
+                        </p>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 매도자의 입력폼 정보를 기반으로 제작되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 마케팅 전략 -->
+            <div class="info-card">
+                <h2 class="card-title">📢 마케팅 및 성장 전략</h2>
+                
+                <div class="highlight-box">
+                    <div class="highlight-title">현재 마케팅</div>
+                    <div class="highlight-text">
+                        • 채널: Meta (Instagram) 이미지 광고<br>
+                        • 월 비용: 15만원<br>
+                        • ROAS: 4.7x (매우 효율적)<br>
+                        • 방식: 직접 운영
+                    </div>
+                </div>
+                
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <strong>🚀 즉시 실행 가능한 성장 전략</strong><br>
+                        월 마케팅 비용 100만원 투자 시 예상 월 매출 470만원 달성 가능
+                    </li>
+                    <li class="feature-item">
+                        <strong>🎯 타겟 확장 기회</strong><br>
+                        현재 인스타그램 중심 → 네이버, 카카오 등 채널 확장 가능
+                    </li>
+                    <li class="feature-item">
+                        <strong>💡 브랜드 콜라보</strong><br>
+                        인테리어/라이프스타일 브랜드와의 협업 기회
+                    </li>
+                    <li class="feature-item">
+                        <strong>🏪 오프라인 진출</strong><br>
+                        팝업스토어, 편집샵 입점 등 오프라인 확장 가능
+                    </li>
+                </ul>
+                <div style="text-align: right; margin-top: 15px;">
+                    <span style="font-size: 10px; color: #999;">* 매도자의 입력폼 정보를 기반으로 제작되었습니다.</span>
+                </div>
+            </div>
+            
+            <!-- 양도 조건 -->
+            <div class="info-card">
+                <h2 class="card-title">🤝 양도 조건 및 지원</h2>
+                
+                <div class="highlight-box" style="margin-bottom: 20px; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%); border-left-color: #ef4444;">
+                    <div class="highlight-title" style="color: #dc2626;">📌 매각 사유</div>
+                    <div class="highlight-text">
+                        <strong>사회 진출을 위한 브랜드 매각</strong><br>
+                        • 창업자의 새로운 커리어 전환을 위한 결정<br>
+                        • 브랜드는 2024년 하반기부터 본격 성장 궤도 진입<br>
+                        • 체계적인 운영 시스템과 브랜드 아이덴티티 완성<br>
+                        • 새로운 운영자가 더 큰 성장을 이끌어갈 최적의 시기
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">인계 기간</span>
+                        <span class="info-value">3주간 집중 인계</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">인계 방식</span>
+                        <span class="info-value">대면 코칭</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">위치</span>
+                        <span class="info-value">서울</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">인계 완료 목표</span>
+                        <span class="info-value">2025년 7월</span>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <div class="highlight-title">✅ 인계 지원 내용</div>
+                    <div class="highlight-text">
+                        <strong>📍 서울 현장 대면 인계 (3주간 집중)</strong><br>
+                        • 주 1회 대면 미팅 + 상시 온라인 응대<br>
+                        • 광고 세팅 및 운영 노하우 전수 (Meta 광고 ROAS 최적화)<br>
+                        • 생산/공급 프로세스 인계 (부자재 도매, 수제작, 업체 프린팅)<br>
+                        • OEM 공장 연결 (서울 노원구 소재)<br>
+                        • 운영 시간: 발주 10분, CS 대응, 물류 20분/일<br>
+                        • 플랫폼별 MD 담당자 연결 (무신사, 29cm, eqlstore, 오늘의집)<br>
+                        • 브랜드 아이덴티티 가이드 및 디자인 소스 제공<br>
+                        • 향후 아이템 아이데이션 및 제조 방식 컨설팅
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 오른쪽 사이드바 -->
+        <div class="sidebar">
+            <!-- 가격 정보 -->
+            <div class="price-card">
+                <div class="price-label">희망 매도가</div>
+                <div class="price-value">800만원</div>
+                <div class="price-sub">재고 350만원 포함</div>
+                <div class="price-sub" style="margin-top: 10px; color: var(--sellerbiz-yellow); font-weight: 600;">
+                    💡 브랜드 가치 + 성장 잠재력
+                </div>
+                
+                <button class="cta-button">입찰 참여하기 →</button>
+            </div>
+            
+            <!-- 투자 매력 포인트 -->
+            <div class="contact-card">
+                <h3 class="contact-title">⭐ 투자 매력 포인트</h3>
+                <div class="contact-item">
+                    <span>📈</span>
+                    <span>높은 순이익률 42.8%</span>
+                </div>
+                <div class="contact-item">
+                    <span>🎯</span>
+                    <span>ROAS 4.7x (매우 효율적)</span>
+                </div>
+                <div class="contact-item">
+                    <span>🚀</span>
+                    <span>초기 단계 (성장 잠재력)</span>
+                </div>
+                <div class="contact-item">
+                    <span>💎</span>
+                    <span>명확한 브랜드 아이덴티티</span>
+                </div>
+                <div class="contact-item">
+                    <span>🏭</span>
+                    <span>안정적인 생산 시스템</span>
+                </div>
+            </div>
+            
+            <!-- 즉시 실행 가능 -->
+            <div class="contact-card" style="margin-top: 20px;">
+                <h3 class="contact-title">✅ 즉시 실행 가능</h3>
+                <div class="contact-item">
+                    <span>🏭</span>
+                    <span>생산 라인 구축 완료</span>
+                </div>
+                <div class="contact-item">
+                    <span>🛍️</span>
+                    <span>4개 플랫폼 입점 완료</span>
+                </div>
+                <div class="contact-item">
+                    <span>📦</span>
+                    <span>350만원 재고 보유</span>
+                </div>
+                <div class="contact-item">
+                    <span>📢</span>
+                    <span>광고 세팅 완료</span>
+                </div>
+            </div>
+            
+            <!-- 문의하기 -->
+            <div class="contact-card" style="margin-top: 20px;">
+                <h3 class="contact-title">💬 문의하기</h3>
+                <button class="cta-button" style="background: white; border: 2px solid var(--sellerbiz-yellow); color: var(--sellerbiz-black); margin-top: 10px;">
+                    브랜드 상담 예약
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 월별 매출 추이 차트 (2024년 ~ 2025년 데이터)
+        const monthlySalesCtx = document.getElementById('monthlySalesChart').getContext('2d');
+        const salesChart = new Chart(monthlySalesCtx, {
+            type: 'line',
+            data: {
+                labels: ['24.1', '24.2', '24.3', '24.4', '24.5', '24.6', '24.7', '24.8', '24.9', '24.10', '24.11', '24.12', '25.1', '25.2', '25.3', '25.4', '25.5'],
+                datasets: [{
+                    label: '월매출',
+                    data: [20.5, 0, 20.1, 107.2, 71.0, 161.0, 65.5, 84.4, 87.3, 91.5, 149.4, 74.4, 123.2, 58.6, 35.3, 19.9, 60.6],
+                    borderColor: '#FFC32A',
+                    backgroundColor: 'rgba(255, 195, 42, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#FFC32A',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    onComplete: () => {},
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data' && context.mode === 'default') {
+                            delay = context.dataIndex * 50 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '매출: ' + context.parsed.y.toFixed(1) + '만원';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '만원';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // 플랫폼별 매출 비중 차트
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['무신사', '공홈', '29CM', 'EQL'],
+                datasets: [{
+                    data: [34.2, 28.3, 25.4, 12.2],
+                    backgroundColor: [
+                        '#FFC32A',
+                        '#667eea',
+                        '#10b981',
+                        '#ef4444'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    hoverOffset: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                animation: {
+                    animateRotate: true,
+                    animateScale: false,
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 분기별 성장 차트 (2024년 ~ 2025년)
+        const quarterlyCtx = document.getElementById('quarterlyChart').getContext('2d');
+        const quarterlyChart = new Chart(quarterlyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025'],
+                datasets: [{
+                    label: '분기별 매출',
+                    data: [40.6, 339.2, 237.2, 315.3, 217.1, 80.5],
+                    backgroundColor: [
+                        'rgba(255, 195, 42, 0.8)',
+                        'rgba(255, 195, 42, 0.8)',
+                        'rgba(255, 195, 42, 0.8)',
+                        'rgba(255, 195, 42, 0.8)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.6)'
+                    ],
+                    borderColor: [
+                        '#FFC32A',
+                        '#FFC32A',
+                        '#FFC32A',
+                        '#FFC32A',
+                        '#667eea',
+                        '#667eea'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    onComplete: () => {},
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data' && context.mode === 'default') {
+                            delay = context.dataIndex * 150;
+                        }
+                        return delay;
+                    },
+                    duration: 1000,
+                    easing: 'easeOutBounce'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '매출: ' + context.parsed.y.toFixed(1) + '만원';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '만원';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // 성장 시나리오 차트
+        const growthCtx = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(growthCtx, {
+            type: 'line',
+            data: {
+                labels: ['현재', '1개월', '3개월', '6개월', '12개월'],
+                datasets: [
+                    {
+                        label: '보수적 시나리오',
+                        data: [60, 80, 150, 250, 400],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        borderDash: [5, 5],
+                        pointStyle: 'circle',
+                        pointRadius: 5
+                    },
+                    {
+                        label: '적극적 시나리오 (마케팅 강화)',
+                        data: [60, 200, 450, 900, 1800],
+                        borderColor: '#FFC32A',
+                        backgroundColor: 'rgba(255, 195, 42, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        pointStyle: 'star',
+                        pointRadius: 7
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 2500,
+                    easing: 'easeInOutQuart'
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '만원';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '만원';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // 페이지 로드시 차트 애니메이션 순차 실행
+        window.addEventListener('load', () => {
+            // 스크롤 기반 애니메이션 트리거
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const canvas = entry.target.querySelector('canvas');
+                        if (canvas && canvas.id === 'monthlySalesChart') {
+                            salesChart.reset();
+                            salesChart.update();
+                        } else if (canvas && canvas.id === 'platformChart') {
+                            platformChart.reset();
+                            platformChart.update();
+                        } else if (canvas && canvas.id === 'quarterlyChart') {
+                            quarterlyChart.reset();
+                            quarterlyChart.update();
+                        } else if (canvas && canvas.id === 'growthChart') {
+                            growthChart.reset();
+                            growthChart.update();
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // 각 차트 컨테이너 관찰
+            document.querySelectorAll('.chart-container, .info-card').forEach(container => {
+                if (container.querySelector('canvas')) {
+                    observer.observe(container);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
